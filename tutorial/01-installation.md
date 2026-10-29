@@ -14,42 +14,51 @@ Once installed, Artha DataTrust appears under **Data Products** -> **Apps** in S
 
 ---
 
-## 2. Navigate to App Permissions
+## 2. Navigate to App Permissions & Required Grants
 
-Before Artha DataTrust can scan and evaluate your data, you must grant it read permissions on target tables. Snowflake Native Apps use the **Permissions SDK Reference Model**, allowing you to grant access securely through the Snowsight UI without writing SQL commands.
+Before Artha DataTrust can operate, provision compute, and scan your data, review and grant the required permissions in the Snowsight UI:
 
-1. In Snowsight, open **Data Products** > **Apps** and select **Artha DataTrust** (or `DQ_APP`).
+1. In Snowsight, open **Data Products** > **Apps** and select **Artha DataTrust**.
 2. Click the **Permissions** tab at the top of the app details page.
 
-![Snowsight Permissions Tab](screenshots/01-app-permissions-tab.jpeg)
-
-Under **Required Privileges & Object References**, you will find the `CONSUMER_TABLE_REF` entry labeled **"Table to scan"** with status **Pending**.
+### Required Permissions Summary:
+- **Account Level Privileges**:
+  - `EXECUTE TASK`: Required to create and manage Snowflake Tasks for scheduled rule execution.
+  - `EXECUTE MANAGED TASK`: Required for Snowflake-managed compute tasks (Serverless Tasks).
+  - `CREATE COMPUTE POOL`: Required to provision the SPCS compute pool for running backend and frontend containers.
+  - `BIND SERVICE ENDPOINT`: Required to expose the frontend container as a public Snowflake service endpoint.
+  - `CREATE WAREHOUSE`: Required to create a dedicated XS warehouse (`DQ_WH`) for the backend service to execute queries.
+  - `IMPORTED PRIVILEGES ON SNOWFLAKE DB`: Required to query account telemetry and credit attribution history.
+- **Database Roles for SNOWFLAKE Database**:
+  - `SNOWFLAKE.CORTEX_USER`: Required to call Snowflake Cortex AI functions for AI Assistant, rule suggestions, and anomaly insights.
+- **Object Access Privileges (Table to scan)**:
+  - Grants `SELECT` on consumer tables via the UI Object Picker.
 
 ---
 
-## 3. Grant Table Access via Object Picker
+## 3. Grant Table or Schema Access
 
-1. Click **+ Add** (or **Review**) next to **Table to scan**.
-2. An **Add Reference** dialog appears.
+You can grant access either directly via the UI or by granting Database/Schema USAGE:
 
-![Add Reference Dialog](screenshots/02-add-reference-dialog.jpeg)
+### Option A: Snowsight Object Picker (Table to scan)
+1. Click **+ Add** (or **Review**) next to **Table to scan** (`CONSUMER_TABLE_REF`).
+2. Use the database hierarchy tree to browse your database and schema (e.g. `SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.CUSTOMER` or your own test database `DQ_TEST_DB.TEST_DATA`).
+3. Click **Done** and then click **Grant**.
 
-3. Use the database object hierarchy tree to browse your database and schema. For this tutorial, we will use the sample TPCH dataset:
-   - Expand **`SNOWFLAKE_SAMPLE_DATA`**
-   - Expand **`TPCH_SF1`**
+### Option B: Schema / Database USAGE Grants
+To monitor entire schemas or databases, run:
+```sql
+-- 1. Grant USAGE on Database to the Application
+GRANT USAGE ON DATABASE <YOUR_DB> TO APPLICATION ARTHA_DATATRUST;
 
-![Table Picker TPCH](screenshots/03-table-picker-tpch.jpeg)
+-- 2. Grant USAGE on Schema to the Application
+GRANT USAGE ON SCHEMA <YOUR_DB>.<YOUR_SCHEMA> TO APPLICATION ARTHA_DATATRUST;
+GRANT SELECT ON ALL TABLES IN SCHEMA <YOUR_DB>.<YOUR_SCHEMA> TO APPLICATION ARTHA_DATATRUST;
 
-4. Select the **`CUSTOMER`** table. Snowsight displays table metadata including row count (~150,000 rows) and table type.
-
-![Customer Table Selected](screenshots/04-customer-table-selected.jpeg)
-
-5. Click **Done**.
-6. Review the confirmation dialog summarizing the grant (`SELECT` on `SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.CUSTOMER`).
-
-![Grant Confirm Dialog](screenshots/05-grant-confirm-dialog.jpeg)
-
-7. Click **Grant**.
+-- 3. Register the Schema Reference inside the App
+CALL ARTHA_DATATRUST.DQ_CORE.REGISTER_REFERENCE('CONSUMER_SCHEMA_REF', 'ADD', '<YOUR_DB>.<YOUR_SCHEMA>');
+```
+*Registering a schema automatically triggers the auto-generation of a starter collection in Data Assets.*
 
 ---
 

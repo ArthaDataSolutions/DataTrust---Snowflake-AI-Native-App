@@ -29,18 +29,38 @@ This final tutorial step covers running your quality checks, inspecting results 
 
 ## 3. Interacting with "Ask the DQ Assistant"
 
-Artha DataTrust includes a built-in AI chatbot backed by Snowflake Cortex AI that answers natural language questions about your data quality posture.
+Artha DataTrust includes a built-in AI assistant backed by Snowflake Cortex AI that answers natural language questions and can plan and create data quality collections automatically.
 
-1. Click the floating **Ask the DQ Assistant** widget in the bottom right corner of any page.
-2. You can type custom natural language queries or click one of the suggested prompts:
-   - *"Which tables have had the most failures this week?"*
-   - *"Show me all rules related to PII data that are currently failing."*
-   - *"What is the data quality trend for the Customer schema?"*
-   - *"Which collections have the lowest pass rate?"*
+### A. Conversational Insights (Cortex Analyst)
+Ask natural language questions about your data quality posture:
+- *"Which tables have had the most failures this week?"*
+- *"Show me all rules related to completeness or validity that are failing."*
+- *"What is the data quality trend for the Customer schema?"*
+- *"Which collections have the lowest pass rate?"*
 
-![Ask the DQ Assistant Chatbot](screenshots/34-chatbot-assistant.jpeg)
+The assistant queries historical execution results, rule metadata, and active issues to provide conversational answers with actionable context.
 
-3. The assistant queries historical execution results, rule metadata, and active issues to provide conversational answers with actionable context.
+### B. Action Planning & Collection Generation (Cortex AI)
+You can also ask the assistant to take action and generate new collections on your granted tables:
+- *"Create a new data quality collection called 'Data Assets Health Check' for monitoring my tables. Apply 2 different rules testing completeness and uniqueness."*
+
+The assistant will formulate an **Action Plan Confirmation Card** showing proposed tables, rules, alert channels, and schedule. Once you click **Confirm**, the collection and rule applications are created and ready to run.
+
+---
+
+## 4. Licensing & Trial Tiers
+
+When first installed from the Marketplace, the app operates under the **Trial Plan** until the listing purchase is completed:
+- **Trial Quotas**:
+  - `Collections`: 1 active collection
+  - `Starter Collections`: 1 auto-generated starter collection
+  - `Alert Channels`: 1 active alert channel
+  - `Rule Applications`: Up to 5 active rule applications
+- To check your account's licensing status and limits at any time, run:
+  ```sql
+  SELECT * FROM ARTHA_DATATRUST.DQ_CORE.LICENSE_STATUS;
+  ```
+- Upgrading to the Paid Marketplace Listing automatically removes all trial limits via `SYSTEM$IS_LISTING_PURCHASED()`.
 
 ---
 
