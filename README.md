@@ -123,13 +123,13 @@ Inside the app UI, administrators can also invite team members under **Access & 
 
 ## Detailed Step-by-Step Visual Tutorial
 
-For a complete walkthrough with high-resolution screenshots for each page, check out the tutorial modules in [`docs/tutorial/`](docs/tutorial/):
+For a complete walkthrough with high-resolution screenshots for each page, check out the tutorial modules in [`tutorial/`](tutorial/):
 
-- **[01. Installation & Table Permissions](docs/tutorial/01-installation.md)**
-- **[02. Data Assets Discovery](docs/tutorial/02-data-assets.md)**
-- **[03. Users, Roles & Teams Management](docs/tutorial/03-users-and-teams.md)**
-- **[04. Rule Library & Collections](docs/tutorial/04-rule-library-and-collections.md)**
-- **[05. Executing Runs & AI Assistant](docs/tutorial/05-running-and-chatbot.md)**
+- **[01. Installation & Table Permissions](tutorial/01-installation.md)**
+- **[02. Data Assets Discovery](tutorial/02-data-assets.md)**
+- **[03. Users, Roles & Teams Management](tutorial/03-users-and-teams.md)**
+- **[04. Rule Library & Collections](tutorial/04-rule-library-and-collections.md)**
+- **[05. Executing Runs & AI Assistant](tutorial/05-running-and-chatbot.md)**
 
 Online Documentation: [Artha DataTrust Documentation Site](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/)
 
