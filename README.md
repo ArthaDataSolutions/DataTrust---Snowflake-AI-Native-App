@@ -44,11 +44,21 @@ Before the app can provision its compute containers or evaluate tables, review a
 
 ---
 
-### 3. Grant Table or Schema Access
-Artha DataTrust supports granting access either via the UI Object Picker or SQL commands:
+### 3. Start the Application Services & Grant Table Access
+1. Open a SQL worksheet in Snowsight and start the application services:
+   ```sql
+   CALL ARTHA_DATATRUST.DQ_CORE.START_APP();
+   ```
+2. Retrieve the secure web application URL:
+   ```sql
+   CALL ARTHA_DATATRUST.DQ_CORE.GET_FRONTEND_URL();
+   ```
+   *(Initial provisioning takes approximately 1–3 minutes while the compute pool initializes. Once ready, open the returned URL in your browser).*
+
+3. Grant access to your target tables using either method below:
 
 #### Option A: Snowsight UI Object Picker (Recommended)
-1. Under **Object access privileges**, locate **Table to scan** (`CONSUMER_TABLE_REF`).
+1. Under **Object access privileges** in the **Permissions** tab, locate **Table to scan** (`CONSUMER_TABLE_REF`).
 2. Click **+ Add** (or **Review**).
 3. Browse your database hierarchy and pick the target table(s) to monitor (e.g. `SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.CUSTOMER` or your own test data).
 4. Click **Done** and confirm **Grant**.
@@ -70,8 +80,8 @@ CALL ARTHA_DATATRUST.DQ_CORE.REGISTER_REFERENCE('CONSUMER_SCHEMA_REF', 'ADD', '<
 
 ---
 
-### 4. Launch App & Run Your First Quality Check
-1. Click **Launch app** (or retrieve the web URL via `CALL ARTHA_DATATRUST.DQ_CORE.GET_FRONTEND_URL()`).
+### 4. Run Your First Quality Check in the Web UI
+1. Open the URL returned by `CALL ARTHA_DATATRUST.DQ_CORE.GET_FRONTEND_URL();`.
 2. **Data Assets**: Verify your granted tables and columns appear under **Observe** > **Data Assets**.
 3. **Rule Library**: Browse 40+ system rules (Completeness, Uniqueness, Validity, Consistency, Timeliness) and apply them to target columns.
 4. **Collections**: Click **Run now** on your collection to evaluate rules on Snowflake compute.
@@ -96,25 +106,11 @@ Inside the app UI, administrators can also invite team members under **Access & 
 
 ---
 
-## Managing Costs & Stopping the App
-
-- **Suspension**: You can suspend the web compute services at any time when not actively using the UI to conserve Snowflake credits:
-  ```sql
-  CALL ARTHA_DATATRUST.DQ_CORE.STOP_APP();
-  ```
-- **Resume**: Start the services again with:
-  ```sql
-  CALL ARTHA_DATATRUST.DQ_CORE.START_APP();
-  ```
-- All your configured rules, collections, issues, and historical test results remain saved in database storage while services are stopped.
-
----
-
 ## Troubleshooting Quick Guide
 
 | Issue | Cause | Solution |
 |---|---|---|
-| **App fails on first launch / start** | Missing account privileges | Ensure all account privileges in the **Permissions** tab are granted. |
+| **App fails on initial start** | Missing account privileges | Ensure all account privileges in the **Permissions** tab are granted before running `START_APP()`. |
 | **Assistant doesn't respond** | Missing Cortex role | Ensure `SNOWFLAKE.CORTEX_USER` role is granted to the application. |
 | **No tables in Data Assets** | No tables granted yet | Use the **Permissions** tab or run `REGISTER_REFERENCE` for your schema. |
 | **`GET_FRONTEND_URL` returns empty/pending** | Services still provisioning | SPCS containers take 1–3 minutes on initial start. Wait 60 seconds and retry. |
@@ -123,15 +119,15 @@ Inside the app UI, administrators can also invite team members under **Access & 
 
 ## Detailed Step-by-Step Visual Tutorial
 
-For a complete walkthrough with high-resolution screenshots for each page, check out the tutorial modules in [`tutorial/`](tutorial/):
+For a complete walkthrough with high-resolution screenshots for each page, visit our documentation:
 
-- **[01. Installation & Table Permissions](tutorial/01-installation.md)**
-- **[02. Data Assets Discovery](tutorial/02-data-assets.md)**
-- **[03. Users, Roles & Teams Management](tutorial/03-users-and-teams.md)**
-- **[04. Rule Library & Collections](tutorial/04-rule-library-and-collections.md)**
-- **[05. Executing Runs & AI Assistant](tutorial/05-running-and-chatbot.md)**
+- **[01. Installation & Table Permissions](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/01-installation.html)**
+- **[02. Data Assets Discovery](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/02-data-assets.html)**
+- **[03. Users, Roles & Teams Management](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/03-users-and-teams.html)**
+- **[04. Rule Library & Collections](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/04-rule-library-and-collections.html)**
+- **[05. Executing Runs & AI Assistant](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/05-running-and-chatbot.html)**
 
-Online Documentation: [Artha DataTrust Documentation Site](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/)
+Online Documentation: [Artha DataTrust Documentation Hub](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/)
 
 ---
 
@@ -140,7 +136,6 @@ Online Documentation: [Artha DataTrust Documentation Site](https://arthadatasolu
 | Command | Purpose |
 |---|---|
 | `CALL ARTHA_DATATRUST.DQ_CORE.START_APP();` | Initializes SPCS compute pools, backend/frontend services, and seeds system rules. |
-| `CALL ARTHA_DATATRUST.DQ_CORE.STOP_APP();` | Suspends application services to conserve compute when not in use. |
 | `CALL ARTHA_DATATRUST.DQ_CORE.GET_FRONTEND_URL();` | Returns the live web ingress URL. |
 | `CALL ARTHA_DATATRUST.DQ_CORE.SP_EXECUTE_COLLECTION('collection_id');` | Runs all rules grouped under a collection on demand. |
 | `SELECT * FROM ARTHA_DATATRUST.DQ_CORE.LICENSE_STATUS;` | Checks active license tier (`TRIAL` vs. `PAID`) and quota usage. |
