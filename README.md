@@ -23,30 +23,39 @@ This guide takes you from Snowflake Marketplace installation to your first data 
 1. In Snowsight, navigate to **Snowflake Marketplace** in the left sidebar.
 2. Search for **Artha DataTrust** and click **Get**.
 3. If prompted, complete your profile details and select or create an `X-Small` warehouse for installation.
-4. When installation finishes, navigate to **Data Products** > **Apps** and open **Artha DataTrust**.
+4. Review the installation version options (Default or Alpha) and confirm.
 
-![Snowsight Permissions Tab](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/01-app-permissions-tab.jpeg)
+![Complete Profile](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/01-complete-profile.jpeg)
+
+![Create Warehouse](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/02-create-warehouse.jpeg)
+
+![Select Version](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/03-select-version.jpeg)
+
+![Set Default Warehouse](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/04-missing-warehouse-prompt.jpeg)
 
 ---
 
 ### 2. Grant Required Permissions (Permissions Tab)
 Before the app can provision its compute containers or evaluate tables, review and grant permissions in the Snowsight UI:
 
-1. On the app details page in Snowsight, click the **Permissions** tab.
-2. Grant the requested **Account level privileges**:
+1. When installation completes, navigate to **Data Products** > **Apps** and open **Artha DataTrust**.
+2. Click the **Permissions** tab at the top.
+3. Grant the requested **Account level privileges**:
    - `EXECUTE TASK` & `EXECUTE MANAGED TASK`: For automated and serverless scheduled quality runs.
    - `CREATE COMPUTE POOL`: To run the backend and frontend web application containers in Snowpark Container Services (SPCS).
    - `BIND SERVICE ENDPOINT`: To expose the secure web UI in Snowsight.
    - `CREATE WAREHOUSE`: To manage the dedicated XS query warehouse (`DQ_WH`).
    - `IMPORTED PRIVILEGES ON SNOWFLAKE DB`: To track execution cost and query telemetry.
-3. Grant the **Database Role** (can be done in UI or via SQL):
+4. Grant the **Database Role** (can be done in UI or via SQL):
    - **In UI**: Scroll down to **Role grants for SNOWFLAKE database**, click the Edit pencil icon, and toggle **`CORTEX_USER`** to Granted.
    - **Via SQL**:
      ```sql
      GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO APPLICATION ARTHA_DATATRUST;
      ```
 
-![Permissions Granted](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/06-permissions-granted.jpeg)
+![Account Privileges](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/05-account-privileges.jpeg)
+
+![Permissions Overview](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/07-permissions-overview.jpeg)
 
 ---
 
@@ -69,7 +78,7 @@ Before the app can provision its compute containers or evaluate tables, review a
 3. Browse your database hierarchy and pick the target table(s) to monitor (e.g. `SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.CUSTOMER` or your own test data).
 4. Click **Done** and confirm **Grant**.
 
-![Add Reference Dialog](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/02-add-reference-dialog.jpeg)
+![Select Data Table](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/06-select-data-table.jpeg)
 
 #### Option B: Schema / Database USAGE Grants (SQL)
 To monitor entire schemas or databases, run:
@@ -95,8 +104,6 @@ CALL ARTHA_DATATRUST.DQ_CORE.REGISTER_REFERENCE('CONSUMER_SCHEMA_REF', 'ADD', '<
 4. **Collections**: Click **Run now** on your collection to evaluate rules on Snowflake compute.
 5. **Issues & Runs**: View pass/fail scores, failed record samples, and assign remediation tasks.
 6. **Ask the DQ Assistant**: Click the AI Assistant widget in the bottom right corner to ask questions in plain English (*"Which tables failed rules this week?"*) or ask it to generate and schedule new collections for you.
-
-![Data Assets Page](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/08-data-assets-with-customer.jpeg)
 
 ---
 
