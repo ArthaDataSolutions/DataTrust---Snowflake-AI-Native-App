@@ -56,6 +56,7 @@ Before the app can provision its compute containers or evaluate tables, review a
 ![Account Privileges](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/05-account-privileges.jpeg)
 
 ![Permissions Overview](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/07-permissions-overview.jpeg)
+![Permissions Overview](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/07-permissions-overview-continued.jpeg)
 
 ---
 
