@@ -46,6 +46,8 @@ You can also ask the assistant to take action and generate new collections on yo
 
 The assistant will formulate an **Action Plan Confirmation Card** showing proposed tables, rules, alert channels, and schedule. Once you click **Confirm**, the collection and rule applications are created and ready to run.
 
+![Create Collection with Chatbot](screenshots/create-collection-chatbot.jpeg)
+
 ---
 
 ## 4. Licensing & Trial Tiers
