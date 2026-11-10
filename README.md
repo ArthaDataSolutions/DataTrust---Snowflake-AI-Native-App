@@ -22,10 +22,10 @@ This guide takes you from Snowflake Marketplace installation to your first data 
 ### 1. Get the App from Snowflake Marketplace
 1. In Snowsight, navigate to **Snowflake Marketplace** in the left sidebar.
 2. Search for **Artha DataTrust** and click **Get**.
-3. If prompted:
-   - Complete your consumer profile (First Name, Last Name, Email).
-   - Select or create a warehouse (`X-Small` recommended for installation).
+3. If prompted, complete your profile details and select or create an `X-Small` warehouse for installation.
 4. When installation finishes, navigate to **Data Products** > **Apps** and open **Artha DataTrust**.
+
+![Snowsight Permissions Tab](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/01-app-permissions-tab.jpeg)
 
 ---
 
@@ -39,8 +39,14 @@ Before the app can provision its compute containers or evaluate tables, review a
    - `BIND SERVICE ENDPOINT`: To expose the secure web UI in Snowsight.
    - `CREATE WAREHOUSE`: To manage the dedicated XS query warehouse (`DQ_WH`).
    - `IMPORTED PRIVILEGES ON SNOWFLAKE DB`: To track execution cost and query telemetry.
-3. Grant the **Database Role**:
-   - `SNOWFLAKE.CORTEX_USER`: To enable the Cortex AI Assistant, rule recommendations, and anomaly detection.
+3. Grant the **Database Role** (can be done in UI or via SQL):
+   - **In UI**: Scroll down to **Role grants for SNOWFLAKE database**, click the Edit pencil icon, and toggle **`CORTEX_USER`** to Granted.
+   - **Via SQL**:
+     ```sql
+     GRANT DATABASE ROLE SNOWFLAKE.CORTEX_USER TO APPLICATION ARTHA_DATATRUST;
+     ```
+
+![Permissions Granted](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/06-permissions-granted.jpeg)
 
 ---
 
@@ -62,6 +68,8 @@ Before the app can provision its compute containers or evaluate tables, review a
 2. Click **+ Add** (or **Review**).
 3. Browse your database hierarchy and pick the target table(s) to monitor (e.g. `SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.CUSTOMER` or your own test data).
 4. Click **Done** and confirm **Grant**.
+
+![Add Reference Dialog](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/02-add-reference-dialog.jpeg)
 
 #### Option B: Schema / Database USAGE Grants (SQL)
 To monitor entire schemas or databases, run:
@@ -88,6 +96,8 @@ CALL ARTHA_DATATRUST.DQ_CORE.REGISTER_REFERENCE('CONSUMER_SCHEMA_REF', 'ADD', '<
 5. **Issues & Runs**: View pass/fail scores, failed record samples, and assign remediation tasks.
 6. **Ask the DQ Assistant**: Click the AI Assistant widget in the bottom right corner to ask questions in plain English (*"Which tables failed rules this week?"*) or ask it to generate and schedule new collections for you.
 
+![Data Assets Page](https://arthadatasolutions.github.io/DataTrust---Snowflake-AI-Native-App/tutorial/screenshots/08-data-assets-with-customer.jpeg)
+
 ---
 
 ## Granting Access to Other Users
@@ -111,7 +121,7 @@ Inside the app UI, administrators can also invite team members under **Access & 
 | Issue | Cause | Solution |
 |---|---|---|
 | **App fails on initial start** | Missing account privileges | Ensure all account privileges in the **Permissions** tab are granted before running `START_APP()`. |
-| **Assistant doesn't respond** | Missing Cortex role | Ensure `SNOWFLAKE.CORTEX_USER` role is granted to the application. |
+| **Assistant doesn't respond** | Missing Cortex role | Ensure `SNOWFLAKE.CORTEX_USER` role is granted in the UI or via SQL. |
 | **No tables in Data Assets** | No tables granted yet | Use the **Permissions** tab or run `REGISTER_REFERENCE` for your schema. |
 | **`GET_FRONTEND_URL` returns empty/pending** | Services still provisioning | SPCS containers take 1–3 minutes on initial start. Wait 60 seconds and retry. |
 
